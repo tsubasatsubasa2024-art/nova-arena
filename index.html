@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>NOVA ARENA - 10-Player Cyber Battle Royale</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+
+  <!-- Game Canvas Rendering Viewport -->
+  <div id="canvas-container">
+    <canvas id="game-canvas"></canvas>
+  </div>
+
+  <!-- ==========================================
+       1. TITLE SCREEN
+       ========================================== -->
+  <div id="screen-title" class="game-screen active">
+    <div class="title-logo-container">
+      <div class="title-logo">NOVA ARENA</div>
+      <div class="title-tagline">10-PLAYER CYBER BATTLE ROYALE</div>
+    </div>
+
+    <div class="title-button-group">
+      <button id="btn-title-start" class="cyber-btn large">戦闘開始 [ENTER]</button>
+      <button id="btn-home-tutorial" class="cyber-btn">操作ガイド & チュートリアル</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       2. HOME SCREEN
+       ========================================== -->
+  <div id="screen-home" class="game-screen">
+    <!-- Top Bar -->
+    <div class="home-top-bar">
+      <div class="pilot-profile-card glass-panel">
+        <div class="pilot-avatar">⚡</div>
+        <div class="pilot-info">
+          <h3 id="home-pilot-name">NOVA_PILOT</h3>
+          <div class="rank-display">
+            <span id="home-rank-name">🥉 ブロンズ</span>
+            <span id="home-rank-rp">120 RP</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button id="btn-home-settings" class="cyber-btn">⚙ 設定</button>
+      </div>
+    </div>
+
+    <!-- Center Showcase -->
+    <div class="home-center-stage">
+      <div class="char-stage-showcase glass-panel">
+        <div class="char-hero-preview">⚡</div>
+        <h2 id="home-selected-char-name" class="char-stage-name">VOLT</h2>
+        <div id="home-selected-char-role" class="char-stage-role">スピード型</div>
+        <p id="home-selected-char-desc" class="char-stage-desc">
+          電光石火の超高速遊撃手。鋭い電撃弾と驚異的な機動力で敵を翻弄する。
+        </p>
+      </div>
+
+      <div class="home-stats-card glass-panel">
+        <h4>パイロット戦績</h4>
+        <div class="stat-row">
+          <span>優勝回数 (VICTORY)</span>
+          <span id="home-stat-victories">0</span>
+        </div>
+        <div class="stat-row">
+          <span>総試合数</span>
+          <span id="home-stat-matches">0</span>
+        </div>
+        <div class="stat-row">
+          <span>累計撃破数</span>
+          <span id="home-stat-kills">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="home-bottom-bar">
+      <button id="btn-home-char" class="cyber-btn">機体変更 (CHANGE)</button>
+      <button id="btn-home-play" class="cyber-btn gold large">BATTLE START (出撃)</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       3. CHARACTER SELECT SCREEN
+       ========================================== -->
+  <div id="screen-char-select" class="game-screen">
+    <div class="char-select-header">
+      <h2>SELECT YOUR COMBAT FRAME</h2>
+      <p style="color: var(--color-text-dim); font-size: 13px;">出撃するバトルフレームを選択してください</p>
+    </div>
+
+    <div class="char-cards-container">
+      <!-- VOLT -->
+      <div class="char-card glass-panel selected" data-char="VOLT">
+        <div class="char-card-badge">SPEED</div>
+        <div class="char-card-avatar">⚡</div>
+        <h3 class="char-card-title" style="color: #00e5ff;">VOLT (ヴォルト)</h3>
+        <div class="spec-bar-group">
+          <div class="spec-bar-row">
+            <span>耐久力 (HP 4200)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 50%;"></div></div>
+          </div>
+          <div class="spec-bar-row">
+            <span>攻撃力 (電撃弾 980)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 65%;"></div></div>
+          </div>
+          <div class="spec-bar-row">
+            <span>移動速度 (超高速)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 95%;"></div></div>
+          </div>
+        </div>
+        <div class="char-card-super">
+          <strong>必殺技: LIGHTNING RUSH</strong>
+          電撃オーラを纏い急加速。周囲に稲妻嵐を放ち、すれ違う敵を粉砕。
+        </div>
+      </div>
+
+      <!-- BLAZE -->
+      <div class="char-card glass-panel" data-char="BLAZE">
+        <div class="char-card-badge">FIREPOWER</div>
+        <div class="char-card-avatar">🔥</div>
+        <h3 class="char-card-title" style="color: #ff3d00;">BLAZE (ブレイズ)</h3>
+        <div class="spec-bar-group">
+          <div class="spec-bar-row">
+            <span>耐久力 (HP 5000)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 68%;"></div></div>
+          </div>
+          <div class="spec-bar-row">
+            <span>攻撃力 (熱核弾 1450)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 95%;"></div></div>
+          </div>
+          <div class="spec-bar-row">
+            <span>移動速度 (標準)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 70%;"></div></div>
+          </div>
+        </div>
+        <div class="char-card-super">
+          <strong>必殺技: SOLAR BURST</strong>
+          極大の太陽光熱弾を投射。着弾地点で巨大な連鎖爆発を引き起こす。
+        </div>
+      </div>
+
+      <!-- GUARD -->
+      <div class="char-card glass-panel" data-char="GUARD">
+        <div class="char-card-badge">DEFENSE</div>
+        <div class="char-card-avatar">🛡</div>
+        <h3 class="char-card-title" style="color: #ffd700;">GUARD (ガード)</h3>
+        <div class="spec-bar-group">
+          <div class="spec-bar-row">
+            <span>耐久力 (HP 6500)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 95%;"></div></div>
+          </div>
+          <div class="spec-bar-row">
+            <span>攻撃力 (散弾 最大2150)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 85%;"></div></div>
+          </div>
+          <div class="spec-bar-row">
+            <span>移動速度 (重装)</span>
+            <div class="spec-bar-track"><div class="spec-bar-fill" style="width: 55%;"></div></div>
+          </div>
+        </div>
+        <div class="char-card-super">
+          <strong>必殺技: IRON FORTRESS</strong>
+          全方位防壁セルを起動。耐久3200の巨大シールドを展開し被ダメ40%カット。
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button id="btn-char-confirm" class="cyber-btn large">この機体で決定</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       4. BATTLE HUD SCREEN
+       ========================================== -->
+  <div id="screen-battle" class="game-screen">
+    <!-- Top HUD -->
+    <div class="hud-top-bar">
+      <div class="hud-match-status">
+        <div class="hud-badge alive glass-panel">
+          生存: <span id="hud-alive-count">10</span> / 10
+        </div>
+        <div class="hud-badge zone glass-panel">
+          <span id="hud-zone-timer">収束まで: 15s</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div id="hud-fps-counter" class="hud-fps">60 FPS (16.6ms)</div>
+        <button id="btn-hud-pause" class="cyber-btn" style="padding: 6px 14px; font-size: 12px;">一時停止 [ESC]</button>
+      </div>
+    </div>
+
+    <!-- Kill Feed -->
+    <div id="hud-kill-feed" class="hud-kill-feed"></div>
+
+    <!-- Countdown Overlay -->
+    <div id="countdown-overlay" class="countdown-overlay">3</div>
+
+    <!-- Bottom Player Status & Controls -->
+    <div class="hud-bottom-bar">
+      <!-- Vitals (HP, Shield, Super, Ammo) -->
+      <div class="hud-player-vitals glass-panel">
+        <div class="vitals-bar-wrapper">
+          <div class="vitals-header">
+            <span>HP</span>
+            <span id="hud-hp-text">4200 / 4200</span>
+          </div>
+          <div class="progress-track">
+            <div id="hud-hp-fill" class="progress-fill hp" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="vitals-bar-wrapper">
+          <div class="vitals-header">
+            <span>SHIELD</span>
+          </div>
+          <div class="progress-track" style="height: 6px;">
+            <div id="hud-shield-fill" class="progress-fill shield" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="vitals-bar-wrapper">
+          <div class="vitals-header">
+            <span>SUPER GAUGE [E]</span>
+          </div>
+          <div class="progress-track" style="height: 8px;">
+            <div id="hud-super-fill" class="progress-fill super" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="vitals-bar-wrapper" style="margin-bottom: 0;">
+          <div class="vitals-header">
+            <span>ENERGY CORE</span>
+          </div>
+          <div class="progress-track" style="height: 6px;">
+            <div id="hud-core-fill" class="progress-fill core" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Ammo Pips -->
+        <div class="ammo-display">
+          <div class="ammo-pip active"></div>
+          <div class="ammo-pip active"></div>
+          <div class="ammo-pip active"></div>
+        </div>
+      </div>
+
+      <!-- Core Ability Overrides -->
+      <div class="hud-core-abilities">
+        <button id="hud-core-dash" class="core-btn" title="オーバーライド・ダッシュ (Qキー / 右クリック)">
+          <span>💨</span>
+          <span>DASH [Q]</span>
+        </button>
+        <button id="hud-core-shield" class="core-btn" title="パルス・シールド (Fキー)">
+          <span>🛡</span>
+          <span>SHIELD [F]</span>
+        </button>
+      </div>
+
+      <!-- Super Action Trigger -->
+      <button id="hud-super-btn" class="super-action-btn">
+        <span>⚡</span>
+        <span>SUPER [E]</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       5. MOBILE TOUCH LAYER
+       ========================================== -->
+  <div class="touch-control-layer">
+    <!-- Left Move Stick Area -->
+    <div id="touch-move-area" class="touch-stick-area">
+      <div id="touch-move-nub" class="touch-stick-nub"></div>
+    </div>
+
+    <!-- Right Aim Stick Area -->
+    <div id="touch-aim-area" class="touch-stick-area">
+      <div id="touch-aim-nub" class="touch-stick-nub"></div>
+    </div>
+
+    <!-- Mobile Action Buttons -->
+    <div class="touch-action-buttons">
+      <button id="btn-touch-dash" class="btn-touch-action">💨 DASH</button>
+      <button id="btn-touch-super" class="btn-touch-action" style="border-color: #ea80fc; color: #ea80fc;">⚡ SUPER</button>
+      <button id="btn-touch-core-a" class="btn-touch-action" style="font-size: 9px;">CORE A</button>
+      <button id="btn-touch-core-b" class="btn-touch-action" style="font-size: 9px;">CORE B</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       6. RESULT SCREEN
+       ========================================== -->
+  <div id="screen-result" class="game-screen">
+    <div class="result-card glass-panel">
+      <div id="result-title" class="result-title victory">VICTORY!</div>
+
+      <div class="result-stats-grid">
+        <div class="result-stat-box">
+          <div class="result-stat-label">撃破数 (KILLS)</div>
+          <div id="result-kills" class="result-stat-val">0</div>
+        </div>
+        <div class="result-stat-box">
+          <div class="result-stat-label">与ダメージ (DAMAGE)</div>
+          <div id="result-damage" class="result-stat-val">0</div>
+        </div>
+        <div class="result-stat-box">
+          <div class="result-stat-label">生存時間 (TIME)</div>
+          <div id="result-time" class="result-stat-val">0秒</div>
+        </div>
+        <div class="result-stat-box">
+          <div class="result-stat-label">獲得ランクポイント</div>
+          <div id="result-rp-gain" class="rp-badge positive">+85 RP</div>
+        </div>
+      </div>
+
+      <div class="result-rank-summary">
+        <div id="result-rank-emblem" class="rank-emblem-large">🥇</div>
+        <div>
+          <h3 id="result-rank-name" style="color: var(--color-gold); font-size: 20px;">ゴールド</h3>
+          <p id="result-rank-total" style="font-size: 14px; color: var(--color-text-dim);">1280 RP</p>
+        </div>
+      </div>
+
+      <div class="result-buttons">
+        <button id="btn-result-rematch" class="cyber-btn gold">再戦 (REMATCH)</button>
+        <button id="btn-result-home" class="cyber-btn">ホームに戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       7. SETTINGS MODAL
+       ========================================== -->
+  <div id="modal-settings" class="modal-backdrop">
+    <div class="modal-window glass-panel">
+      <div class="modal-header">
+        <h3>システム設定</h3>
+        <button id="btn-close-settings" class="btn-close-modal">&times;</button>
+      </div>
+
+      <div class="setting-item">
+        <label>画質設定 (GRAPHICS QUALITY)</label>
+        <div class="segmented-control">
+          <button class="btn-quality" data-quality="LOW">LOW</button>
+          <button class="btn-quality" data-quality="MEDIUM">MED</button>
+          <button class="btn-quality active" data-quality="HIGH">HIGH</button>
+          <button class="btn-quality" data-quality="ULTRA">ULTRA</button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label>CPU AI 難易度</label>
+        <div class="segmented-control">
+          <button class="btn-diff" data-diff="EASY">EASY</button>
+          <button class="btn-diff active" data-diff="NORMAL">NORMAL</button>
+          <button class="btn-diff" data-diff="HARD">HARD</button>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <label>マスター音量</label>
+        <input id="slider-volume-master" type="range" min="0" max="1" step="0.05" value="0.8">
+      </div>
+
+      <div class="setting-item">
+        <label>BGM 音量</label>
+        <input id="slider-volume-bgm" type="range" min="0" max="1" step="0.05" value="0.45">
+      </div>
+
+      <div class="setting-item">
+        <label>効果音 (SFX) 音量</label>
+        <input id="slider-volume-sfx" type="range" min="0" max="1" step="0.05" value="0.75">
+      </div>
+
+      <div class="setting-item" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 18px;">
+        <button id="btn-reset-data" class="cyber-btn" style="border-color: #ff1744; color: #ff1744; width: 100%;">
+          戦績・ランクデータ初期化
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       8. PAUSE MODAL
+       ========================================== -->
+  <div id="modal-pause" class="modal-backdrop">
+    <div class="modal-window glass-panel" style="text-align: center; width: 380px;">
+      <h2 style="font-size: 28px; margin-bottom: 24px; color: var(--color-cyan);">PAUSED</h2>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <button id="btn-pause-resume" class="cyber-btn">ゲーム再開 [ESC]</button>
+        <button id="btn-pause-settings" class="cyber-btn">設定変更</button>
+        <button id="btn-pause-quit" class="cyber-btn" style="border-color: #ff1744; color: #ff1744;">試合を離脱する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       9. TUTORIAL MODAL
+       ========================================== -->
+  <div id="modal-tutorial" class="modal-backdrop">
+    <div class="modal-window glass-panel" style="width: 580px;">
+      <div class="modal-header">
+        <h3>NOVA ARENA 操作ガイド</h3>
+        <button id="btn-close-tutorial" class="btn-close-modal">&times;</button>
+      </div>
+
+      <div style="font-size: 13px; line-height: 1.8; color: #cfd8dc;">
+        <h4 style="color: var(--color-cyan); margin: 12px 0 6px 0;">【PC操作】</h4>
+        <p>・<strong>W / A / S / D</strong>：8方向移動（斜め移動も等速に最適化）</p>
+        <p>・<strong>マウスカーソル</strong>：360度精密照準</p>
+        <p>・<strong>左クリック長押し</strong>：連射通常攻撃</p>
+        <p>・<strong>Spaceキー</strong>：急速ダッシュ（残像＆回避）</p>
+        <p>・<strong>Eキー</strong>：必殺技（ダメージ蓄積で発動可能）</p>
+        <p>・<strong>Q / Fキー / 右クリック</strong>：エネルギーコア独自アビリティ発動</p>
+        <p>・<strong>ESCキー</strong>：ポーズメニュー</p>
+
+        <h4 style="color: var(--color-cyan); margin: 16px 0 6px 0;">【スマホ・タブレット操作】</h4>
+        <p>・<strong>画面左側スティック</strong>：自由移動</p>
+        <p>・<strong>画面右側スティック</strong>：照準決定＆自動射撃</p>
+        <p>・<strong>DASH / SUPERボタン</strong>：各種アクション即時発動</p>
+
+        <h4 style="color: var(--color-gold); margin: 16px 0 6px 0;">【独自要素：エネルギーコア】</h4>
+        <p>マップ中央や各所に出現する光るコアを回収してゲージを100%にすると、戦況に応じた2つの強化が発動可能になります。</p>
+        <p>・<strong>A: OVERRIDE DASH</strong>：次回ダッシュ距離2倍＋無敵時間付与</p>
+        <p>・<strong>B: PULSE SHIELD</strong>：5秒間被ダメージ50%カット＋周囲反発パルス</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/game.js"></script>
+
+</body>
+</html>
